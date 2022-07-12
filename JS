@@ -1,0 +1,47 @@
+const city=document.getElementById('input');
+const search=document.getElementById('search');
+const temp=document.getElementById('temperature');
+const humi=document.getElementById('humidity');
+const wind=document.getElementById('wind');
+const pres=document.getElementById('pressure');
+
+search.addEventListener("click",()=>{
+
+    if(city.value=="")
+    {
+        alert("PLEASE GIVE A CITY NAME");
+    }
+    else{
+        fetch("https://api.openweathermap.org/data/2.5/weather?q=" + city.value + "&appid=137dc8f5ed28c3517f3a2e8123dc5098")
+                    .then((res) => res.json())
+                    .then((data) => {
+                        console.log(data);
+                        if (data.cod == "404") {
+                            document.getElementById('error').innerHTML = `Please try with different city`;
+                        }
+                        else{
+                            const temperature = (data.main.temp - 273.15).toFixed(2);
+
+                            const pressure = (data.main.pressure * 100 * 0.0002953).toFixed(2);
+
+
+                            temp.innerHTML = `Temperature => ${temperature}°C`;
+                            humi.innerHTML = `Humidity => ${data.main.humidity} %`;
+                            pres.innerHTML = `Pressure => ${pressure} "Hg`;
+                            wind.innerHTML = `Wind Speed => ${data.wind.speed} km/h`;
+                        }
+                        }).catch((error) => {
+                            console.log(error);
+                        })
+                        temp.innerHTML = ``;
+            humi.innerHTML = ``;
+            pres.innerHTML = ``;
+            wind.innerHTML = ``;
+            document.getElementById('error').innerHTML = ``;
+                    }
+
+
+
+
+
+})
